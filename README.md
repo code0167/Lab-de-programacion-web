@@ -43,7 +43,6 @@ Después entra a `http://localhost:8000`. El servidor solo entrega archivos est�
 | `dist/app.js` | Estado, eventos, operaciones CRUD, persistencia y manipulación del DOM. |
 | `dist/icon.svg` | Icono local de la aplicación. |
 | `tests/core.test.cjs` | Pruebas de la lógica de datos con el ejecutor incluido en Node.js. |
-| `DEMO_3_MINUTOS.md` | Guion con tiempos y acciones para exponer en clase o grabar un video. |
 | `PRUEBAS_MANUALES.md` | Casos de prueba reproducibles para revisar la aplicación. |
 
 El proyecto usa **HTML5, CSS3 y JavaScript ES6+**, sin frameworks, bibliotecas remotas ni compilación. El archivo `.openai/hosting.json` únicamente configura la versión alojada; no es necesario para ejecutar la entrega local.
@@ -120,32 +119,6 @@ node --test tests/core.test.cjs
 
 Las pruebas cubren validación, fechas, búsquedas, filtros combinados, ordenamiento sin mutar el arreglo, estadísticas y serialización con rechazo de datos corruptos. Para verificar las acciones del navegador, utiliza `PRUEBAS_MANUALES.md`.
 
-## Repositorio y entrega
-
-La entrega descargable incluye **`agenda-academica.bundle`**, una copia portátil del repositorio Git con su historial. Si tienes Git instalado, puedes restaurarlo así, desde la carpeta que contiene el archivo:
-
-```bash
-git clone agenda-academica.bundle agenda-academica
-cd agenda-academica
-git log --oneline
-```
-
-La aplicación también está incluida como archivos normales: no necesitas Git para abrirla.
-
-Si tu profesor exige una URL de **GitHub**, crea allí un repositorio vacío, sustituye `TU_USUARIO` por tu nombre de usuario y ejecuta dentro del repositorio clonado:
-
-```bash
-git remote remove origin
-git remote add origin https://github.com/TU_USUARIO/agenda-academica.git
-git branch -M main
-git push -u origin main
-```
-
-No se ha creado un repositorio en una cuenta de GitHub. El bundle es un repositorio Git real, pero no sustituye una URL de GitHub cuando el docente la exige. El sitio alojado es privado inicialmente; para entregar a otra persona, usa el ZIP o publica tu propia copia con el acceso adecuado.
-
-## Demostración
-
-Sigue **`DEMO_3_MINUTOS.md`** para presentar la aplicación en clase o grabar un video. Incluye creación, validación, edición, búsqueda, cambio de estado, eliminación y recuperación al recargar. El archivo es un guion, no un video ya grabado.
 
 ## Alcance y límites
 
@@ -155,5 +128,3 @@ Sigue **`DEMO_3_MINUTOS.md`** para presentar la aplicación en clase o grabar un
 - No hay autenticación propia, notificaciones programadas ni backend de datos.
 - El porcentaje se calcula como `completadas / total * 100`, redondeado; con cero tareas muestra 0%.
 - Los ejemplos solo se cargan cuando la agenda está vacía y se pueden editar o eliminar como cualquier tarea.
-
-Antes de entregar, agrega tu nombre completo, grupo y matrícula si tu docente los solicita, y revisa el código para explicar su funcionamiento con tus propias palabras.
