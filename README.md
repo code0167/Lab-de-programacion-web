@@ -128,3 +128,51 @@ Las pruebas cubren validación, fechas, búsquedas, filtros combinados, ordenami
 - No hay autenticación propia, notificaciones programadas ni backend de datos.
 - El porcentaje se calcula como `completadas / total * 100`, redondeado; con cero tareas muestra 0%.
 - Los ejemplos solo se cargan cuando la agenda está vacía y se pueden editar o eliminar como cualquier tarea.
+
+
+# Aula Agenda · Aplicación de escritorio en Releases
+
+Versión 1.0.0 para **Windows 10/11 de 64 bits (x64)**. Conserva la agenda académica original: tareas, materias, prioridades, notas, edición, eliminación, estados, filtros y progreso. Funciona sin internet ni inicio de sesión.
+
+## Instalar y abrir
+
+1. Extrae el ZIP de la entrega.
+2. Ejecuta `Aula-Agenda-1.0.0-Instalador-Windows-x64.exe`.
+3. Sigue el asistente en español. Se instala para tu usuario.
+4. Abre **Aula Agenda** desde el escritorio o el menú Inicio.
+
+El instalador incluye el motor necesario. Para utilizarlo no necesitas Node.js, Python, Visual Studio Code ni un servidor. La versión actual es x64; no es una aplicación para Android ni un paquete específico para Windows ARM.
+
+El ejecutable de esta entrega no tiene firma digital comercial. Windows puede indicar que el editor es desconocido. La entrega incluye el código fuente y una suma SHA-256 para poder revisar su procedencia e integridad.
+
+## Llevar tus tareas desde la web
+
+1. Entra en tu agenda web con el mismo navegador donde están tus tareas.
+2. Pulsa **Exportar copia** y guarda el archivo `.json`.
+3. Abre Aula Agenda en Windows y pulsa **Importar copia**.
+4. Selecciona ese JSON, revisa el resumen y confirma.
+
+La importación **añade tareas con identificadores nuevos**. Si una tarea ya existe, conserva la versión que tienes abierta; no la sobrescribe ni duplica. No es sincronización automática: para llevar tareas nuevas entre equipos debes exportar e importar una copia.
+
+Las copias tienen el mismo esquema `{"version":1,"tasks":[...]}` de la aplicación web. Se admiten archivos JSON de hasta 2 MB. Los archivos inválidos se rechazan sin cambiar la agenda. Puedes exportar tareas de la sesión incluso si el almacenamiento local muestra un error.
+
+## Dónde se guardan los datos
+
+- Los datos de la aplicación permanecen en el perfil de tu usuario: `%APPDATA%\AulaAgenda`.
+- Los archivos del programa se instalan en `%LOCALAPPDATA%\Programs\AulaAgenda`.
+- La aplicación web y la de escritorio tienen almacenes separados.
+- El desinstalador conserva la carpeta de datos; reinstalar permite volver a utilizarla.
+- **Exportar copia** guarda un respaldo JSON en la carpeta que tú elijas.
+
+No modifiques manualmente los archivos internos de Chromium. Para conservar y trasladar tareas utiliza la copia JSON.
+
+## Atajos y menús
+
+| Acción | Atajo |
+| --- | --- |
+| Nueva tarea | Ctrl + N |
+| Exportar copia | Ctrl + Mayús + E |
+| Importar copia | Ctrl + O |
+| Cerrar | Alt + F4 |
+
+Los menús **Archivo**, **Edición**, **Ver** y **Ayuda** incluyen las acciones habituales. Abrir el programa dos veces enfoca la ventana existente para evitar dos sesiones de edición independientes.
