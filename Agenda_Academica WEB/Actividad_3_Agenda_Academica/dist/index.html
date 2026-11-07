@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#234d3d">
+  <meta name="description" content="Organiza tus tareas, materias y entregas. Una agenda académica sencilla que conserva tus datos en este navegador.">
+  <title>Aula · Agenda académica</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="core.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Saltar al contenido</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="./" aria-label="Aula, inicio"><span class="brand-mark" aria-hidden="true">a</span>aula<span class="brand-dot">.</span></a>
+      <span class="header-label">TU ESPACIO ACADÉMICO</span>
+      <span class="local-badge" id="storage-status"><span class="status-dot" aria-hidden="true"></span>Guardado en este navegador</span>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow"><span class="tiny-line"></span> MENOS PENDIENTES, MÁS CALMA</p>
+        <h1 id="page-title">Tu semestre, <em>en orden.</em></h1>
+        <p class="intro-text">Un lugar para tus tareas. Un paso más cerca de terminarlas.</p>
+      </div>
+      <div class="today"><span class="today-icon" aria-hidden="true">◷</span><div><span class="today-label">HOY</span><time id="today-date"></time></div></div>
+    </section>
+
+    <div id="storage-warning" class="warning" role="alert" hidden>
+      <p id="storage-warning-text"></p>
+      <button type="button" id="reset-storage" class="text-button" hidden>Restablecer almacenamiento</button>
+    </div>
+    <noscript><p class="warning">Activa JavaScript en tu navegador para usar la agenda.</p></noscript>
+
+    <section class="overview" aria-label="Resumen de tareas">
+      <div class="stat-card"><span class="stat-icon pending-icon" aria-hidden="true">↗</span><div><p class="stat-number" id="pending-count">0</p><p class="stat-label">Por completar</p></div><span class="stat-note">Paso a paso</span></div>
+      <div class="stat-card"><span class="stat-icon completed-icon" aria-hidden="true">✓</span><div><p class="stat-number" id="completed-count">0</p><p class="stat-label">Completadas</p></div><span class="stat-note">Bien hecho</span></div>
+      <div class="stat-card"><span class="stat-icon overdue-icon" aria-hidden="true">!</span><div><p class="stat-number" id="overdue-count">0</p><p class="stat-label">Vencidas</p></div><span class="stat-note">Para retomar</span></div>
+    </section>
+
+    <div class="workspace">
+      <aside class="form-panel" aria-labelledby="form-heading">
+        <div class="panel-heading"><span class="panel-step" aria-hidden="true">＋</span><div><h2 id="form-heading">Nueva tarea</h2><p id="form-subheading">Sácala de tu cabeza. Ponla aquí.</p></div></div>
+        <form id="task-form" novalidate>
+          <div class="field"><label for="title">¿Qué tienes que hacer? <span class="required">*</span></label><input id="title" name="title" type="text" maxlength="80" placeholder="Ej. Preparar la exposición" required aria-describedby="title-error"><p class="field-error" id="title-error" hidden></p></div>
+          <div class="field"><label for="subject">Materia <span class="required">*</span></label><input id="subject" name="subject" type="text" maxlength="50" list="subjects" placeholder="Ej. Programación Web" required aria-describedby="subject-error"><datalist id="subjects"></datalist><p class="field-error" id="subject-error" hidden></p></div>
+          <div class="form-row">
+            <div class="field"><label for="dueDate">Fecha de entrega <span class="required">*</span></label><input id="dueDate" name="dueDate" type="date" required aria-describedby="dueDate-error"><p class="field-error" id="dueDate-error" hidden></p></div>
+            <div class="field"><label for="priority">Prioridad <span class="required">*</span></label><select id="priority" name="priority" aria-describedby="priority-error"><option value="media">Media</option><option value="alta">Alta</option><option value="baja">Baja</option></select><p class="field-error" id="priority-error" hidden></p></div>
+          </div>
+          <div class="field"><div class="label-row"><label for="notes">Notas <span class="optional">(opcional)</span></label><span id="notes-count" class="character-count">0/500</span></div><textarea id="notes" name="notes" rows="3" maxlength="500" placeholder="Detalles que no quieres olvidar…" aria-describedby="notes-error notes-count"></textarea><p class="field-error" id="notes-error" hidden></p></div>
+          <button type="submit" id="submit-task" class="button button-primary full-width"><span aria-hidden="true">＋</span> Agregar tarea</button>
+          <button type="button" id="cancel-edit" class="button button-secondary full-width" hidden>Cancelar edición</button>
+          <p class="form-footnote">Los campos con * son obligatorios.</p>
+        </form>
+        <div class="little-note"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 10h8M8 14h5M6 3h12a2 2 0 0 1 2 2v16l-4-3H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/></svg><p>No necesitas hacerlo todo hoy.<br><strong>Empieza por una tarea.</strong></p></div>
+      </aside>
+
+      <section class="tasks-panel" aria-labelledby="tasks-heading">
+        <div class="tasks-heading-row"><div class="tasks-heading"><h2 id="tasks-heading">Mis tareas</h2><span id="total-count" class="count-badge">0</span></div><button type="button" id="load-examples" class="text-button">Cargar ejemplo <span aria-hidden="true">↗</span></button></div>
+        <div class="progress-row"><span id="progress-label">Tu próxima tarea empieza aquí</span><span id="progress-percent">0%</span></div>
+        <progress id="task-progress" max="100" value="0" aria-label="Porcentaje de tareas completadas">0%</progress>
+
+        <div class="status-filters" role="group" aria-label="Filtrar por estado">
+          <button type="button" data-filter="all" class="filter-button active" aria-pressed="true">Todas</button>
+          <button type="button" data-filter="pending" class="filter-button" aria-pressed="false">Pendientes</button>
+          <button type="button" data-filter="completed" class="filter-button" aria-pressed="false">Completadas</button>
+          <button type="button" data-filter="overdue" class="filter-button" aria-pressed="false">Vencidas</button>
+        </div>
+        <div class="search-toolbar">
+          <div class="search-field"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><label for="search" class="sr-only">Buscar tareas</label><input type="search" id="search" placeholder="Buscar una tarea…" autocomplete="off"></div>
+          <label for="subject-filter" class="sr-only">Filtrar por materia</label><select id="subject-filter"><option value="">Todas las materias</option></select>
+          <label for="sort" class="sr-only">Ordenar tareas</label><select id="sort"><option value="date">Por fecha</option><option value="priority">Por prioridad</option><option value="recent">Más recientes</option><option value="title">Por nombre</option></select>
+        </div>
+        <div class="result-row"><p id="results-description" aria-live="polite">0 tareas</p><button type="button" id="clear-filters" class="text-button" hidden>Limpiar filtros</button></div>
+        <ul id="task-list" class="task-list" aria-label="Tareas registradas"></ul>
+        <div class="empty-state" id="empty-state">
+          <div class="empty-art" aria-hidden="true"><span class="art-orbit"></span><svg width="52" height="58" viewBox="0 0 52 58" fill="none"><rect x="7" y="5" width="37" height="47" rx="6" fill="#fff" stroke="#73917a" stroke-width="1.5"/><path d="M16 3v7M27 3v7M38 3v7" stroke="#234d3d" stroke-width="3" stroke-linecap="round"/><path d="m15 25 3 3 5-6M15 38l3 3 5-6M28 25h8M28 38h8" stroke="#73917a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="art-spark">✦</span></div>
+          <h3 id="empty-title">Haz espacio para lo que sigue</h3><p id="empty-description">Agrega tu primera tarea y empieza a organizar tu semestre.</p>
+          <button type="button" id="empty-action" class="button button-secondary">Crear mi primera tarea <span aria-hidden="true">→</span></button>
+        </div>
+        <p class="list-footnote"><span aria-hidden="true">✓</span> Marca el círculo de una tarea cuando la termines.</p>
+      </section>
+    </div>
+    <footer class="page-footer"><span>aula. <span class="footer-divider">/</span> Una tarea a la vez.</span><span>Tus datos permanecen en este navegador.</span></footer>
+  </main>
+
+  <template id="task-template">
+    <li class="task-card">
+      <button type="button" class="complete-button" data-action="toggle" aria-pressed="false"><svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 10 4 4 8-8"/></svg></button>
+      <div class="task-content"><div class="task-topline"><span class="task-subject"></span><span class="priority-badge"></span></div><h3 class="task-title"></h3><p class="task-notes"></p><div class="task-meta"><time class="task-date"></time><span class="due-label"></span></div></div>
+      <div class="task-actions"><button type="button" class="icon-button" data-action="edit" title="Editar tarea"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m14 5 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14l-1 7Z"/></svg></button><button type="button" class="icon-button delete-button" data-action="delete" title="Eliminar tarea"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7"/></svg></button></div>
+    </li>
+  </template>
+
+  <dialog id="confirm-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
+    <form method="dialog"><span class="dialog-icon" aria-hidden="true">!</span><h2 id="dialog-title">¿Eliminar tarea?</h2><p id="dialog-description"></p><div class="dialog-actions"><button type="submit" value="cancel" class="button button-secondary" autofocus>Cancelar</button><button type="submit" value="confirm" id="confirm-action" class="button button-danger">Eliminar tarea</button></div></form>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+</body>
+</html>
